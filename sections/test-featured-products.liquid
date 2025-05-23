@@ -1,0 +1,134 @@
+<div class="featured-products page-width">
+  {%- if section.settings.title != blank -%}
+    <h2 class="featured-products__title">{{ section.settings.title }}</h2>
+  {%- endif -%}
+
+  {%- if section.settings.subtitle != blank -%}
+    <p class="featured-products__subtitle">{{ section.settings.subtitle }}</p>
+  {%- endif -%}
+
+  <div class="featured-products-grid">
+    {%- liquid
+      assign products_to_display = section.settings.product_list
+
+      if template.name == 'collection'
+        if products_to_display == blank
+          assign products_to_display = collection.products
+          assign limit = 10
+        endif
+      endif
+
+      assign skip_card_product_styles = false
+
+      for product in products_to_display limit: limit
+        render 'test-product-card', product: product, skip_styles: skip_card_product_styles
+
+        assign skip_card_product_styles = true
+      endfor
+    -%}
+  </div>
+</div>
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  #shopify-section-{{ section.id }} .featured-products-grid {
+    display: grid;
+    grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);
+    gap: {{ section.settings.grid_gap }}px;
+  }
+
+  @media screen and (max-width: 767px) and (min-width: 390px) {
+    #shopify-section-{{ section.id }} .featured-products-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media screen and (max-width: 389px) {
+    #shopify-section-{{ section.id }} .featured-products-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "Test Featured Products",
+  "tag": "section",
+  "class": "test-featured-products",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.test-featured-products.settings.title.name",
+      "default": "t:sections.test-featured-products.settings.title.default"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:sections.test-featured-products.settings.title.name",
+      "default": "t:sections.test-featured-products.settings.title.default"
+    },
+    {
+      "type": "product_list",
+      "id": "product_list",
+      "label": "t:sections.test-featured-products.settings.products.name",
+      "info": "t:sections.test-featured-products.settings.products.info"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "label": "t:sections.test-featured-products.settings.columns_desktop.name"
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "min": 0,
+      "max": 32,
+      "step": 4,
+      "default": 16,
+      "unit": "px",
+      "label": "t:sections.test-featured-products.settings.grid_gap.name"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Test Featured Products"
+    }
+  ],
+  "enabled_on": {
+    "templates": ["page", "product", "collection"]
+  }
+}
+{% endschema %}

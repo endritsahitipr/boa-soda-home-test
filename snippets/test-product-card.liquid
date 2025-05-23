@@ -1,0 +1,45 @@
+{%- unless skip_styles -%}
+  {{ 'test-product-card.css' | asset_url | stylesheet_tag }}
+{%- endunless -%}
+
+{%- liquid
+  assign title_color = product.metafields.boa_test.title_color.value | default: '#FF0000'
+  assign current_variant = product.selected_or_first_available_variant
+-%}
+
+<div class="product-card">
+  <div class="product-card__content">
+    <div class="product-price__container">
+      {%- if product.compare_at_price > product.price -%}
+        <p class="product-price compare-at-price">
+          <s>{{ product.compare_at_price | money }}</s>
+        </p>
+        <p class="product-price">{{ product.price | money }}</p>
+      {%- else -%}
+        <p class="product-price">{{ product.price | money }}</p>
+      {%- endif -%}
+    </div>
+    <p class="product-vendor">{{ product.vendor }}</p>
+    <a class="product-title" style="color: {{ title_color }};" href="{{ product.url }}">{{ product.title }}</a>
+  </div>
+
+  <div class="product-image">
+    <a href="{{ product.url }}">
+      {{
+        product.featured_image
+        | image_url: width: product.featured_image.width
+        | image_tag: loading: 'lazy', alt: product.featured_image.alt
+      }}
+    </a>
+  </div>
+
+  <form method="post" action="/cart/add">
+    <input type="hidden" name="id" value="{{ current_variant.id }}">
+    <input type="hidden" name="quantity" value="1">
+    <button type="submit" class="add-to-cart-button">
+      {{ 'products.product.add_to_cart' | t }}
+    </button>
+  </form>
+
+  <div id="product{{ product.id }}-placeholder"></div>
+</div>

@@ -1317,6 +1317,32 @@
         "name": "Image banner"
       }
     },
+    "test-featured-products": {
+      "name": "Test Featured Products",
+      "settings": {
+        "title": {
+          "name": "Title",
+          "default": "Test Featured Products"
+        },
+        "subtitle": {
+          "name": "Subtitle",
+          "default": "Add a subtitle"
+        },
+        "products": {
+          "name": "Products",
+          "info": "On a Collection template, this section displays the first 10 products by default. If a product list is selected, it will display those products instead."
+        },
+        "columns_desktop": {
+          "name": "Number of columns on desktop"
+        },
+        "grid_gap": {
+          "name": "Grid gap"
+        }
+      },
+      "presets": {
+        "name": "Image with text"
+      }
+    },
     "image-with-text": {
       "name": "Image with text",
       "settings": {
